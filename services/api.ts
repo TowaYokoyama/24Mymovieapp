@@ -1,35 +1,43 @@
 export const TMDB_CONFIG = {
-    BASE_URL: "https://api.themoviedb.org/3/",
-    api_key:process.env.EXPO_PUBLIC_MOVIE_API_KEY,
-    headers :{
-        accept: 'application/json',
-        Authoriziation: `BEARER ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`
-    }
-}
+  BASE_URL: "https://api.themoviedb.org/3/",
+};
 
-export const fetchMovies = async ({query} : {query : string}) => {
-    const endpoint = query 
-    ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-    : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
+export const fetchMovies = async ({ query }: { query: string }) => {
+  // .envファイルからAPIキーを読み込む
+  const apiKey = process.env.EXPO_PUBLIC_MOVIE_API_KEY;
 
-    const response = await fetch(endpoint, {
-        method:'GET',
-        headers: TMDB_CONFIG.headers,
-    });
+  // APIキーが設定されていない場合はエラーを投げる
+  if (!apiKey) {
+    throw new Error("API key is not configured in your .env file.");
+  }
 
-    if(!response.ok){
-        throw new Error(`Failed to fetch movies: ${response.statusText}`);
-    }
+  // クエリの有無でリクエストするURLの基本部分を決める
+  const baseEndpoint = query
+    ? `${TMDB_CONFIG.BASE_URL}search/movie?query=${encodeURIComponent(query)}`
+    : `${TMDB_CONFIG.BASE_URL}discover/movie?sort_by=popularity.desc`;
 
-    const data = await response.json();
+  // URLの末尾にAPIキーを正しく追加する
+  const separator = baseEndpoint.includes('?') ? '&' : '?';
+  const endpoint = `${baseEndpoint}${separator}api_key=${apiKey}`;
 
-    return data.results;
-}
+  // データを取得する
+  const response = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+    },
+  });
 
-//これは削除すべきかどうなのか
-function async(arg0: { query: any }) {
-    throw new Error("Function not implemented.")
-}
+  // レスポンスが正常でない場合はエラーを投げる
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error("API Error:", errorData);
+    throw new Error(`Failed to fetch movies: ${errorData.status_message || response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.results;
+};
 //const url = 'https://api.themoviedb.org/3/keyword/keyword_id/movies?include_adult=false&language=en-US&page=1';
 //const options = {
  // method: 'GET',
