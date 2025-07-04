@@ -17,7 +17,7 @@ const MovieCard = ({ id, title, poster_path, vote_average, release_date} :Movie)
         resizeMode="cover"
         />
 
-        <Text className="text-sm text-white font-bold">{title}</Text>
+        <Text className="text-sm text-white font-bold mt-2" numberOfLines={1}>{title}</Text>
 
         <View className="flex-row items-center justify-start gap-x-1">
             <Image source={icons.star} className="size-4" />
