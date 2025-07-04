@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native'
 import { images } from '@/app/constants/images'
 import MovieCard from '@/components/MovieCard'
@@ -9,14 +9,14 @@ import { icons } from '@/app/constants/icons'
 import SearchBar from '@/components/SearchBar'
 
 const Search = () => {
-
+  const [searchQuery, setSearchQuery] = useState('');
 
    const router = useRouter();
 
 
-  const { data: movies, loading, error} = useFetch(()=> fetchMovies({
-    query:''}
-  ))
+  const { data: movies, loading, error} = useFetch(() => fetchMovies({
+    query:  searchQuery
+  }))
 
 
 
@@ -57,11 +57,11 @@ const Search = () => {
             </Text>
            )}
 
-           {!loading && !error && 'SEARCH TERM'.trim()
+           {!loading && !error && searchQuery.trim()
             && movies?.length > 0 && (
             <Text className="text-xl text-white font-bold">
               Search Results for {''}
-              <Text className="text-[#A8B6FF]">SEARCH TERM</Text>
+              <Text className="text-[#A8B6FF]">{ searchQuery}</Text>
             </Text>
            )}
            </>}
