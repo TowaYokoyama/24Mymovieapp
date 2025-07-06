@@ -15,7 +15,7 @@ const Search = () => {
    const router = useRouter();
 
 
-  const { data: movies, loading, error, refetch: loadMovies, reset} = useFetch(() => fetchMovies({
+  const { data: movies = [], loading, error, refetch: loadMovies, reset} = useFetch(() => fetchMovies({
     query:  searchQuery
   }), false)
 
@@ -27,7 +27,11 @@ const Search = () => {
     
     if(searchQuery.trim()){
       await loadMovies();
-    }else {
+
+      if (movies?.length >0 && movies?.[0]){
+       await  updateSearchCount(searchQuery, movies[0]);
+      }
+    } else {
       reset()
     }
   },500); //ミリ秒単位
