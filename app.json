@@ -16,6 +16,7 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
+       "package": "com.jsm_rn_movieapp.rnmymovieapp" ,
       "edgeToEdgeEnabled": true
     },
     "web": {
