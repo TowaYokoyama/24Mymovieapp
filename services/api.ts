@@ -40,6 +40,29 @@ export const fetchMovies = async ({ query }: { query: string }) => {
 };
 
 
+export const fetchMoviedetails = async (movieId: string): Promise<MovieDetails> => {
+  // .envファイルからAPIキーを読み込む
+  const apiKey = process.env.EXPO_PUBLIC_MOVIE_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("API key is not configured in your .env file.");
+  }
+
+  const endpoint = `${TMDB_CONFIG.BASE_URL}movie/${movieId}?api_key=${apiKey}`;
+
+  const response = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+    },
+  });
+
+  if (!response.ok) throw new Error('Failed to fetch movie details');
+
+  const data = await response.json();
+
+  return data;
+};
 
 //const url = 'https://api.themoviedb.org/3/keyword/keyword_id/movies?include_adult=false&language=en-US&page=1';
 //const options = {
