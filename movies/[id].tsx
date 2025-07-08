@@ -10,6 +10,7 @@ interface MovieInfoProps {
   value ?: string |number | null
 }
 
+
 const MovieInfo = ({ label, value}: MovieInfoProps) => {
   return (
     <View className="flex-col items-center justify-center mt-5">
@@ -91,28 +92,28 @@ const MovieDetails = () => {
           <MovieInfo label="Overview" value={!Array.isArray(movie) ? movie?.overview : undefined} />
           <MovieInfo
             label="Genres"
-            value={movie?.genres?.map((g) => g.name).join(" • ") || "N/A"}
+          value={(movie as any)?.genres?.map((g: any) => g.name).join(" • ") || "N/A"}
           />
 
           <View className="flex flex-row justify-between w-1/2">
             <MovieInfo
               label="Budget"
-              value={`$${(movie?.budget ?? 0) / 1_000_000} million`}
+              value={`$${((movie as any )?.budget ?? 0) / 1_000_000} million`}
             />
             <MovieInfo
               label="Revenue"
-              value={`$${Math.round(
-                (movie?.revenue ?? 0) / 1_000_000
-              )} million`}
+             value={`$${Math.round(
+  ((movie as any)?.revenue ?? 0) / 1_000_000
+)} million`}
             />
           </View>
 
           <MovieInfo
             label="Production Companies"
             value={
-              movie?.production_companies?.map((c) => c.name).join(" • ") ||
-              "N/A"
-            }
+  (movie as any)?.production_companies?.map((c: any) => c.name).join(" • ") ||
+  "N/A"
+}
           />
         </View>
       </ScrollView>
